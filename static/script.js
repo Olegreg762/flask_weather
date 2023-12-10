@@ -16,19 +16,21 @@ $(function () {
     $("#search_btn").on("click", function(){
         // Sets event to the value of the entered in text in search field
         event = $(this).siblings("#city_input").val();
-        city_name = event
-        // get_weather()
-        // Set text content for the document elements "#city" and "#history_{i}"
-        // i being the variable i
-        $("#city").text(event)
-        $(`#history_${i}`).text(`${event}`)
-        // Sets the local storage
-        localStorage.setItem(`#history_${i}`,event);
-        $(`#history_${i}`).removeClass("invisible").addClass("visible");
-        // Increaments the value of i by 1
-        i++
-        if(i>4){
-            i = 0
+        if(event){
+            city_name = event
+            // get_weather()
+            // Set text content for the document elements "#city" and "#history_{i}"
+            // i being the variable i
+            $("#city").text(event)
+            $(`#history_${i}`).text(`${event}`)
+            // Sets the local storage
+            localStorage.setItem(`#history_${i}`,event);
+            $(`#history_${i}`).removeClass("invisible").addClass("visible");
+            // Increaments the value of i by 1
+            i++
+            if(i>4){
+                i = 0
+            }
         }
     });
 
