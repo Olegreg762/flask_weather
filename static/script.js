@@ -1,17 +1,17 @@
 $(function () {
     // Variables for the code
     let i = 0;
-    let event = "";
-    let city_name = "New York";
+    let event;
+    let city_name;
     // Checks if there is already content in the local storage `#history_0` if not will set it to `New York`
-    if(localStorage.getItem("#history_0") == null){
-        $("#city").text(city_name)
-    }else{
-        // If `#history_0` has content will display it
-        $("#history_0").text(localStorage.getItem("#history_0"))
-        $("#city").text(localStorage.getItem("#history_0"))
-        i++;
-    }
+    // if(localStorage.getItem("#history_0") == null){
+    //     $("#city").text(city_name)
+    // }else{
+    //     // If `#history_0` has content will display it
+    //     $("#history_0").text(localStorage.getItem("#history_0"))
+    //     // $("#city").text(localStorage.getItem("#history_0"))
+    //     i++;
+    // }
     // Event listener for the search button to be clicked
     $("#search_btn").on("click", function(){
         // Sets event to the value of the entered in text in search field
