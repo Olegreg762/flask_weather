@@ -1,19 +1,34 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session
 import requests
 import os
 from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
+app.secret_key = os.getenv("SECRET_KEY")
 api_key = os.getenv("API_KEY")
+
+@app.before_request
+def before_request():
+    if 'history' not in session:
+        session['history'] = {}
+    if 'counter' not in session:
+        (session['counter']) = int(0)
+
+
+
 @app.route("/", methods=["GET", "POST"])
 def index():
-    weather_data = {'city': "New York", 'temperature': 'Temp 44.13F', 'wind': 'Wind 6.38 MPH', 'humid': 'Humidity 67', 'icon': 'https://openweathermap.org/img/w/04n.png'}
     if request.method == "POST":
         city = request.form["city_input"]
         weather_data = {'city': city, 'temperature': 'Temp 44.13F', 'wind': 'Wind 6.38 MPH', 'humid': 'Humidity 67', 'icon': 'https://openweathermap.org/img/w/04n.png'}
         # weather_data = get_weather(city)
-        return render_template("index.html", weather_data=weather_data)
+        update_session_variables(city)
+        history = session['history']
+        # print(history)
+        return render_template("index.html", weather_data=weather_data, history=history)
+    weather_data = {'city': "New York", 'temperature': 'Temp 44.13F', 'wind': 'Wind 6.38 MPH', 'humid': 'Humidity 67', 'icon': 'https://openweathermap.org/img/w/04n.png'}
+    # weather_data = get_weather('Chicago')
     return render_template("index.html",weather_data=weather_data)
 
 def get_weather(city):
@@ -33,6 +48,15 @@ def get_weather(city):
         "icon": f'https://openweathermap.org/img/w/{weather_data_response["list"][0]["weather"][0]["icon"]}.png'
     }
     return weather_data_json
+
+def update_session_variables(city):
+    session['history'][session['counter']].update({'visibility': 'visible', 'city': city})
+    print(session)
+    session['counter'] += 1
+    if session['counter'] > 4:
+        session["counter"] = 0
+    
+
 
 if __name__ == "__main__":
     app.run(port=8000, debug=True)
