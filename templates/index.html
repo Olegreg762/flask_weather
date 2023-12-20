@@ -47,16 +47,18 @@
         <selected-city-forcast class="card rounded-0 bg-dark bg-secondary bg-gradient justify-content-center col-12 col-lg-10">
             <h2 class="align-text-center text-center">5 Day Forecast</h2>
             <div class="row justify-content-center">
+                {% for day in range(1,6) %}
                 <div class="col-12 col-lg-2">
-                    <ul class="card rounded-0 bg-dark bg-secondary bg-gradient" id="day_1">
-                        <img id="icon_1"></img>
-                        <li id="date_1"></li>
-                        <li id="temp_1"></li>
-                        <li id="wind_1"></li>
-                        <li id="humid_1"></li>
+                    <ul class="card rounded-0 bg-dark bg-secondary bg-gradient" id="day_{{day}}">
+                        <img id="icon_{{day}}" src="{{weather_data['icon' + day|string]}}"></img>
+                        <li id="date_{{day}}">{{weather_data['date' + day|string]}}</li>
+                        <li id="temp_{{day}}">{{weather_data['temperature0' + day|string]}}</li>
+                        <li id="wind_{{day}}">{{weather_data['wind' + day|string]}}</li>
+                        <li id="humid_{{day}}">{{weather_data['humid' + day|string]}}</li>
                     </ul>
                 </div>
-                <div class="col-12 col-lg-2">
+                {% endfor %}
+                <!-- <div class="col-12 col-lg-2">
                     <ul class="card rounded-0 bg-dark bg-secondary bg-gradient" id="day_2">
                         <img id="icon_2"></img>
                         <li id="date_2"></li>
@@ -91,7 +93,7 @@
                         <li id="wind_5"></li>
                         <li id="humid_5"></li>
                     </ul>
-                </div>
+                </div> -->
             </div>
         </selected-city-forcast>
     </div>

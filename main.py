@@ -28,13 +28,11 @@ def before_request():
 def index():
     if request.method == "POST":
         city = request.form["city_input"]
-        # weather_data = {'city': city, 'temperature': 'Temp 44.13F', 'wind': 'Wind 6.38 MPH', 'humid': 'Humidity 67', 'icon': 'https://openweathermap.org/img/w/04n.png'}
         weather_data = get_weather(city)
         update_session_variables(city)
         history = session['history']
         return render_template("index.html", weather_data=weather_data, history=history)
-    weather_data = {'city0': "New York", 'temperature0': 'Temp 44.13F', 'wind0': 'Wind 6.38 MPH', 'humid0': 'Humidity 67', 'icon0': 'https://openweathermap.org/img/w/04n.png'}
-    # weather_data = get_weather('Topeka')
+    weather_data = get_weather('Chicago')
     return render_template("index.html",weather_data=weather_data)
 
 def get_weather(city):
