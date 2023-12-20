@@ -11,9 +11,15 @@ api_key = os.getenv("API_KEY")
 @app.before_request
 def before_request():
     if 'history' not in session:
-        session['history'] = {}
+        session['history'] = {
+            0: {'visibility': 'invisible', 'city': ''},
+            1: {'visibility': 'invisible', 'city': ''},
+            2: {'visibility': 'invisible', 'city': ''},
+            3: {'visibility': 'invisible', 'city': ''},
+            4: {'visibility': 'invisible', 'city': ''}
+        }
     if 'counter' not in session:
-        (session['counter']) = int(0)
+        session['counter'] = int(0)
 
 
 
@@ -25,7 +31,6 @@ def index():
         # weather_data = get_weather(city)
         update_session_variables(city)
         history = session['history']
-        # print(history)
         return render_template("index.html", weather_data=weather_data, history=history)
     weather_data = {'city': "New York", 'temperature': 'Temp 44.13F', 'wind': 'Wind 6.38 MPH', 'humid': 'Humidity 67', 'icon': 'https://openweathermap.org/img/w/04n.png'}
     # weather_data = get_weather('Chicago')
@@ -50,11 +55,17 @@ def get_weather(city):
     return weather_data_json
 
 def update_session_variables(city):
-    session['history'][session['counter']].update({'visibility': 'visible', 'city': city})
-    print(session)
+    counter = str(session['counter'])
+
+    history = session['history']
+    history[counter].update({'visibility': 'visible', 'city': city})
+
+    counter = int(counter)
+    counter += 1
     session['counter'] += 1
-    if session['counter'] > 4:
-        session["counter"] = 0
+    if counter > 4:
+        counter = 0
+        session['counter'] = 0
     
 
 
