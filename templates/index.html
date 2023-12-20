@@ -21,12 +21,12 @@
         <!-- Card For Chosen City -->
         <selected-city-now class="card rounded-0 bg-dark bg-secondary bg-gradient col-12 col-lg-8">
             <ul>
-                <h2><span id="city"></span> {{weather_data["city"]}} <span id="date_0"></span></h2>
+                <h2><span id="city"></span> {{weather_data["city0"]}} <span id="date_0"></span></h2>
                 <div class="card rounded-0 bg-dark bg-secondary bg-gradient col-12 col-lg-2">
-                    <img id="icon_0" src="{{weather_data['icon']}}" ></img>
-                    <li id="temp_0"> {{weather_data["temperature"]}} </li>
-                    <li id="wind_0"> {{weather_data["wind"]}} </li>
-                    <li id="humid_0"> {{weather_data["humid"]}} </li>
+                    <img id="icon_0" src="{{weather_data['icon0']}}" ></img>
+                    <li id="temp_0"> {{weather_data["temperature0"]}} </li>
+                    <li id="wind_0"> {{weather_data["wind0"]}} </li>
+                    <li id="humid_0"> {{weather_data["humid0"]}} </li>
                 </div>
             </ul>
         </selected-city-now>
@@ -35,12 +35,12 @@
     <div class="row">
     <div class="card rounded-0 bg-dark bg-secondary bg-gradient col-12 col-lg-2">
             <ul id="history">
-                
-                <!-- <button class="invisible row history_button" id="history_0"></button>
-                <button class="invisible row history_button" id="history_1"></button>
-                <button class="invisible row history_button" id="history_2"></button>
-                <button class="invisible row history_button" id="history_3"></button>
-                <button class="invisible row history_button" id="history_4"></button> -->
+                <p>History</p>
+                <form method="post" action="/">
+                    {% for key, entry in session['history'].items() %}
+                    <button type="submit" name="city_input" class="{{entry['visibility']}} row history_button" id="history_{{ loop.index0 }}" value="{{ entry['city'] }}">{{ entry['city'] }}</button>
+                    {% endfor %}
+                </form>
             </ul>
         </div>
         <!-- Cards for each forecasted day -->

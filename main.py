@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, session
 import requests
 import os
+from datetime import datetime
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -27,13 +28,13 @@ def before_request():
 def index():
     if request.method == "POST":
         city = request.form["city_input"]
-        weather_data = {'city': city, 'temperature': 'Temp 44.13F', 'wind': 'Wind 6.38 MPH', 'humid': 'Humidity 67', 'icon': 'https://openweathermap.org/img/w/04n.png'}
-        # weather_data = get_weather(city)
+        # weather_data = {'city': city, 'temperature': 'Temp 44.13F', 'wind': 'Wind 6.38 MPH', 'humid': 'Humidity 67', 'icon': 'https://openweathermap.org/img/w/04n.png'}
+        weather_data = get_weather(city)
         update_session_variables(city)
         history = session['history']
         return render_template("index.html", weather_data=weather_data, history=history)
-    weather_data = {'city': "New York", 'temperature': 'Temp 44.13F', 'wind': 'Wind 6.38 MPH', 'humid': 'Humidity 67', 'icon': 'https://openweathermap.org/img/w/04n.png'}
-    # weather_data = get_weather('Chicago')
+    weather_data = {'city0': "New York", 'temperature0': 'Temp 44.13F', 'wind0': 'Wind 6.38 MPH', 'humid0': 'Humidity 67', 'icon0': 'https://openweathermap.org/img/w/04n.png'}
+    # weather_data = get_weather('Topeka')
     return render_template("index.html",weather_data=weather_data)
 
 def get_weather(city):
@@ -45,13 +46,22 @@ def get_weather(city):
     weather_data_url = f"https://api.openweathermap.org/data//2.5/forecast?units=imperial&lat={lat}&lon={lon}&appid={api_key}"
     response_weather = requests.get(weather_data_url)
     weather_data_response = response_weather.json()
-    weather_data_json = {
-        "city": geo_data_response[0]["name"],
-        "temperature": f'Temp {weather_data_response["list"][0]["main"]["temp"]}F',
-        "wind": f'Wind {weather_data_response["list"][0]["wind"]["speed"]} MPH',
-        "humid": f'Humidity {weather_data_response["list"][0]["main"]["humidity"]}',
-        "icon": f'https://openweathermap.org/img/w/{weather_data_response["list"][0]["weather"][0]["icon"]}.png'
-    }
+    weather_data_json = {}
+    for i in range(6):
+        jd = i * 8
+        if jd == 40:
+            jd -= 1
+        date = datetime.utcfromtimestamp(weather_data_response["list"][jd]["dt"])
+        formatted_date = date.strftime("%m/%d/%Y")
+        weather_data_json.update({
+        f"city{i}": geo_data_response[0]["name"],
+        f"date{i}" : formatted_date,
+        f"temperature{i}": f'Temp {weather_data_response["list"][jd]["main"]["temp"]}F',
+        f"wind{i}": f'Wind {weather_data_response["list"][jd]["wind"]["speed"]} MPH',
+        f"humid{i}": f'Humidity {weather_data_response["list"][jd]["main"]["humidity"]}',
+        f"icon{i}": f'https://openweathermap.org/img/w/{weather_data_response["list"][jd]["weather"][0]["icon"]}.png'
+        })
+    print(weather_data_json)
     return weather_data_json
 
 def update_session_variables(city):
