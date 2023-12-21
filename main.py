@@ -33,14 +33,23 @@ def index():
         history = session['history']
         return render_template("index.html", weather_data=weather_data, history=history)
     weather_data = get_weather('Chicago')
-    return render_template("index.html",weather_data=weather_data)
+    history = session['history']
+    return render_template("index.html",weather_data=weather_data, history=history)
 
 def get_weather(city):
     weather_geo_url = f"https://api.openweathermap.org/geo/1.0/direct?q={city}&limit=1&appid={api_key}"
     response_geo = requests.get(weather_geo_url)
     geo_data_response = response_geo.json()
-    lat = geo_data_response[0]['lat']
-    lon = geo_data_response[0]['lon']
+    try:
+        lat = geo_data_response[0]['lat']
+        lon = geo_data_response[0]['lon']
+    except IndexError:
+        lat = geo_data_response['lat']
+        lon = geo_data_response['lon']
+    except:
+        lat = '41.8755616'
+        lon = '-87.6244212'
+        print('something else')
     weather_data_url = f"https://api.openweathermap.org/data//2.5/forecast?units=imperial&lat={lat}&lon={lon}&appid={api_key}"
     response_weather = requests.get(weather_data_url)
     weather_data_response = response_weather.json()
