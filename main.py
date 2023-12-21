@@ -59,7 +59,6 @@ def get_weather(city):
         f"humid{i}": f'Humidity {weather_data_response["list"][jd]["main"]["humidity"]}',
         f"icon{i}": f'https://openweathermap.org/img/w/{weather_data_response["list"][jd]["weather"][0]["icon"]}.png'
         })
-    print(weather_data_json)
     return weather_data_json
 
 def update_session_variables(city):

@@ -52,7 +52,7 @@
                     <ul class="card rounded-0 bg-dark bg-secondary bg-gradient" id="day_{{day}}">
                         <img id="icon_{{day}}" src="{{weather_data['icon' + day|string]}}"></img>
                         <li id="date_{{day}}">{{weather_data['date' + day|string]}}</li>
-                        <li id="temp_{{day}}">{{weather_data['temperature0' + day|string]}}</li>
+                        <li id="temp_{{day}}">{{weather_data['temperature' + day|string]}}</li>
                         <li id="wind_{{day}}">{{weather_data['wind' + day|string]}}</li>
                         <li id="humid_{{day}}">{{weather_data['humid' + day|string]}}</li>
                     </ul>
