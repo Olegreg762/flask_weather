@@ -50,9 +50,11 @@ def get_weather(city):
         lat = '41.8755616'
         lon = '-87.6244212'
         print('something else')
+        print('geo_data_response', geo_data_response)
     weather_data_url = f"https://api.openweathermap.org/data//2.5/forecast?units=imperial&lat={lat}&lon={lon}&appid={api_key}"
     response_weather = requests.get(weather_data_url)
     weather_data_response = response_weather.json()
+    print('weather_data_response', weather_data_response)
     weather_data_json = {}
     for i in range(6):
         jd = i * 8
