@@ -4,6 +4,7 @@ import os
 from datetime import datetime
 from dotenv import load_dotenv
 load_dotenv()
+from data.us_regions import us_regions
 
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY")
@@ -28,33 +29,26 @@ def before_request():
 def index():
     if request.method == "POST":
         city = request.form["city_input"]
-        weather_data = get_weather(city)
+        region = request.form["region_select"]
+        weather_data = get_weather(city, region)
         update_session_variables(city)
         history = session['history']
-        return render_template("index.html", weather_data=weather_data, history=history)
-    weather_data = get_weather('Chicago')
+        return render_template("index.html", weather_data=weather_data, history=history, options=us_regions)
+    weather_data = get_weather('Chicago', 'illinois')
     history = session['history']
-    return render_template("index.html",weather_data=weather_data, history=history)
+    return render_template("index.html",weather_data=weather_data, history=history, options=us_regions)
 
-def get_weather(city):
-    weather_geo_url = f"https://api.openweathermap.org/geo/1.0/direct?q={city}&limit=1&appid={api_key}"
+def get_weather(city, region):
+    weather_geo_url = f"https://api.openweathermap.org/geo/1.0/direct?q={city},{region}&appid={api_key}"
     response_geo = requests.get(weather_geo_url)
     geo_data_response = response_geo.json()
-    try:
-        lat = geo_data_response[0]['lat']
-        lon = geo_data_response[0]['lon']
-    except IndexError:
-        lat = geo_data_response['lat']
-        lon = geo_data_response['lon']
-    except:
-        lat = '41.8755616'
-        lon = '-87.6244212'
-        print('something else')
-        print('geo_data_response', geo_data_response)
+
+    lat = geo_data_response[0]['lat']
+    lon = geo_data_response[0]['lon']
+ 
     weather_data_url = f"https://api.openweathermap.org/data//2.5/forecast?units=imperial&lat={lat}&lon={lon}&appid={api_key}"
     response_weather = requests.get(weather_data_url)
     weather_data_response = response_weather.json()
-    print('weather_data_response', weather_data_response)
     weather_data_json = {}
     for i in range(6):
         jd = i * 8
