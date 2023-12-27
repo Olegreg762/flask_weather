@@ -44,7 +44,14 @@
                 <p>History</p>
                 <form method="post" action="/">
                     {% for key, entry in session['history'].items() %}
-                    <button type="submit" name="city_input" class="{{entry['visibility']}} row history_button" id="history_{{ loop.index0 }}" value="{{ entry['city'] }}">{{ entry['city'] }}</button>
+                    <button type="submit" name="history_input" 
+                    class="{{entry['visibility']}} row history_button" 
+                    id="history_{{ loop.index0 }}" 
+                    value="{{ entry['city'] }},{{ entry['region'] }}"
+                    >
+                        {{ entry['city'] }}, {{ entry['region'] }}
+
+                    </button>
                     {% endfor %}
                 </form>
             </ul>

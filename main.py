@@ -28,15 +28,31 @@ def before_request():
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "POST":
-        city = request.form["city_input"]
-        region = request.form["region_select"]
-        weather_data = get_weather(city, region)
-        update_session_variables(city, region)
-        history = session['history']
-        return render_template("index.html", weather_data=weather_data, history=history, options=us_regions)
+        if 'history_input' in request.form:
+            city, region = request.form['history_input'].split(',')
+            return history_button(city, region)
+        else:
+            city = request.form["city_input"].title()
+            region = request.form["region_select"]
+            return search_input(city, region) 
+            
     weather_data = get_weather('Chicago', 'illinois')
     history = session['history']
     return render_template("index.html",weather_data=weather_data, history=history, options=us_regions)
+
+
+def search_input(city,region):
+    weather_data = get_weather(city, region)
+    update_session_variables(city, region)
+    history = session['history']
+    return render_template("index.html", weather_data=weather_data, history=history, options=us_regions)
+
+
+def history_button(city, region):
+    weather_data = get_weather(city, region)
+    history = session['history']
+    return render_template("index.html", weather_data=weather_data, history=history, options=us_regions)
+
 
 def get_weather(city, region):
     weather_data_json = {}
