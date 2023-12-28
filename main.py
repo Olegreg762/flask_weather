@@ -25,15 +25,15 @@ def before_request():
 
 
 
-@app.route("/", methods=["GET", "POST"])
+@app.route("/", methods=["GET"])
 def index():
-    if request.method == "POST":
-        if 'history_input' in request.form:
-            city, region = request.form['history_input'].split(',')
+    if request.method == "GET":
+        if 'history_input' in request.args:
+            city, region = request.args['history_input'].split(',')
             return history_button(city, region)
-        else:
-            city = request.form["city_input"].title()
-            region = request.form["region_select"]
+        elif 'city_input' in request.args:
+            city = request.args["city_input"].title()
+            region = request.args["region_select"]
             return search_input(city, region) 
             
     weather_data = get_weather('Chicago', 'illinois')

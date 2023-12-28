@@ -13,7 +13,7 @@
         <!-- Card For City Search -->
         <city-search-card class="card rounded-0 bg-dark bg-secondary bg-gradient col-12 col-lg-4">
             <h1>Search For A City:</h1>
-            <form method="post" action="/">
+            <form method="get" action="/">
                 <input id="city_input" name="city_input" type="text" required><br>
                 <label for="region_select">Select A US Region:</label>
                 <select id="region_select" name="region_select">
@@ -42,7 +42,7 @@
     <div class="card rounded-0 bg-dark bg-secondary bg-gradient col-12 col-lg-2">
             <ul id="history">
                 <p>History</p>
-                <form method="post" action="/">
+                <form method="get" action="/">
                     {% for key, entry in session['history'].items() %}
                     <button type="submit" name="history_input" 
                     class="{{entry['visibility']}} row history_button" 
